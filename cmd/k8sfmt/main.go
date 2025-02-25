@@ -12,8 +12,8 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Println("Usage: k8sfmt <filename>")
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: k8sfmt <filename> [filename2] [filename3]...")
 		os.Exit(1)
 	}
 
@@ -25,12 +25,6 @@ func main() {
 	}
 }
 
-// TODO:
-// - Move to top-level pkg, once we finalize the func signatures.
-// - Support stdin/stdout if no file is given.
-// - Format files concurrently
-// - Support folder?
-// - Support recursive folder via ./...?
 func formatYAML(fromFilename string, toFilename string) error {
 	// Read the YAML file
 	f, err := os.ReadFile(fromFilename)
@@ -39,8 +33,8 @@ func formatYAML(fromFilename string, toFilename string) error {
 	}
 
 	// Unmarshal and marshal to format YAML with indent=2.
-	var data any
-	if err := yaml.Unmarshal(f, &data); err != nil {
+	var node yaml.Node
+	if err := yaml.Unmarshal(f, &node); err != nil {
 		return fmt.Errorf("unmarshal YAML: %w", err)
 	}
 
@@ -48,7 +42,7 @@ func formatYAML(fromFilename string, toFilename string) error {
 	enc := yaml.NewEncoder(&formatted)
 	enc.SetIndent(2)
 
-	if err := enc.Encode(data); err != nil {
+	if err := enc.Encode(node.Content[0]); err != nil {
 		return fmt.Errorf("marshal YAML: %w", err)
 	}
 
