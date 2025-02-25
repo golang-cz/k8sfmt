@@ -13,7 +13,7 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: k8sfmt <filename> [filename2] [filename3]...")
+		fmt.Println("Usage: kubefmt <filename> [filename2] [filename3]...")
 		os.Exit(1)
 	}
 

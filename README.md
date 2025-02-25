@@ -1,28 +1,14 @@
-# k8sfmt - Opinionated YAML formatter for GitOps
+# kubefmt - YAML formatter for K8s manifests
 
-Like `gofmt` but for YAML files with a focus on readability of Kubernetes manifests, such as `ConfigMaps` holding configuration files.
+Opinionated formatter for GitOps repositories. Prioritizes readability of K8s manifests, e.g.`ConfigMap` holding longer configuration files.
 
 No config or CLI options. Take it or leave it.
-
-## Install
-
-```
-$ go install github.com/golang-cz/k8sfmt/cmd/k8sfmt@latest
-```
 
 ## Usage
 
 ```
-$ k8sfmt *.yml
+$ kubefmt *.yaml
 ```
-
-## Features
-
-- Indents by 2 spaces
-- Renders multiline strings using `|2` [literal style](https://yaml.org/spec/1.2.2/#literal-style) to improve readability
-    - No `\"escaped\"` strings and `\n\n` newlines
-- Sorts keys alphabetically
-- Keeps comments
 
 ```diff
  apiVersion: v1
@@ -41,3 +27,22 @@ $ k8sfmt *.yml
 +     write_timeout = "10s"
 +     
 ```
+
+## Install
+
+```
+$ go install github.com/golang-cz/kubefmt/cmd/kubefmt@latest
+```
+
+## Features
+
+- Indents by 2 spaces
+- Renders multiline strings using `|2` [literal style](https://yaml.org/spec/1.2.2/#literal-style) to improve readability
+    - No `\"escaped\"` strings and `\n\n` newlines
+- Sorts keys alphabetically
+- Keeps comments
+
+
+## License
+
+[MIT license](./LICENSE)
