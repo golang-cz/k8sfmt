@@ -24,22 +24,20 @@ $ k8sfmt *.yml
 - Sorts keys alphabetically
 - Keeps comments
 
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: game-demo
-data:
-  # property-like keys; each key maps to a simple value
-  player_initial_lives: "3" # comment
-  ui_properties_file_name: "user-interface.properties"
-
-  # file-like keys
-  game.properties: |
-    enemy.types=aliens,monsters
-    player.maximum-lives=5    
-  user-interface.properties: |
-    color.good=purple
-    color.bad=yellow
-    allow.textmode=true
+```diff
+ apiVersion: v1
+ kind: ConfigMap
+ metadata:
+   name: game-demo
+ data:
+-  config.toml: "\n### Service configuration\n\n[server]\n  port          = 8000\n  read_timeout  = \"10s\"\n  write_timeout = \"10s\"\n"
++  config.toml: |2
++   
++   ### Service configuration
++   
++   [server]
++     port          = 8000
++     read_timeout  = "10s"
++     write_timeout = "10s"
++     
 ```
