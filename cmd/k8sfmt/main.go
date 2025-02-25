@@ -19,7 +19,7 @@ func main() {
 
 	for _, f := range os.Args[1:] {
 		if err := formatYAML(f, f); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Error: %v: %v\n", f, err)
 			os.Exit(1)
 		}
 	}
@@ -37,6 +37,9 @@ func formatYAML(fromFilename string, toFilename string) error {
 	if err := yaml.Unmarshal(f, &node); err != nil {
 		return fmt.Errorf("unmarshal YAML: %w", err)
 	}
+	if len(node.Content) != 1 {
+		return fmt.Errorf("expected 1 YAML node, got %d", len(node.Content))
+	}
 
 	var formatted bytes.Buffer
 	enc := yaml.NewEncoder(&formatted)
@@ -48,6 +51,8 @@ func formatYAML(fromFilename string, toFilename string) error {
 
 	// Read each line
 	input := bufio.NewScanner(&formatted)
+	input.Buffer(nil, 10*1024*1024) // Allow reading long lines, up to 10 MB.
+
 	outputFile, err := os.Create(toFilename)
 	if err != nil {
 		return fmt.Errorf("open file for writing %v: %w", toFilename, err)
